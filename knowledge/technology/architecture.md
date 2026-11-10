@@ -67,6 +67,14 @@ repositories/coding-pet/
 - Tauri Notification Plugin `2.8.0`，Axum `0.8.9`。
 - React `19.3.1`、TypeScript `6.0.3`、Vite `8.3.6`；精确版本以 lockfile 为准。
 
+## 桌宠窗口实现
+
+- Tauri 主窗口静态配置使用 `decorations: false`、`transparent: true`、`shadow: false` 和 `alwaysOnTop: true`；不在 React 启动后重复调用窗口 setter。
+- React 窗口根节点使用 `data-tauri-drag-region="deep"`，使卡片背景、宠物图形和状态文字等非交互后代都可拖动窗口。
+- Tauri 深层拖拽区域内部仍调用原生 `window.start_dragging` 命令，因此主窗口 capability 必须保留 `core:window:allow-start-dragging`；删除该权限会产生 `window.start_dragging not allowed` 并导致拖拽失效。
+- `.pet-card` 的圆角、半透明背景、边框和阴影属于应用内容视觉，不属于 macOS 原生窗口装饰。
+- 2026-11-10 的 macOS debug 应用验证覆盖三类拖拽区域、无原生装饰、透明画布、Always on Top，以及合成 Codex 完成事件触发 React `COMPLETED` 状态；系统通知的发布包展示效果仍按“待补充”项处理。
+
 ## 当前监听约束
 
 - HTTP Listener 固定绑定 `127.0.0.1:17891`，只接受 `POST /events`。

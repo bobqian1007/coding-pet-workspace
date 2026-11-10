@@ -1,0 +1,12 @@
+runtime/*
+!runtime/.gitkeep
+
+# Independently versioned child repositories
+repositories/*/
+
+# Workspace-local files
+*.log
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json

@@ -26,8 +26,8 @@
 
 | 名称 | 职责 | 工作区路径 | 来源 | 接入方式 | 状态 |
 | --- | --- | --- | --- | --- | --- |
-| `coding-pet-workspace` | 工作区规则、知识库、Agent Skills 与仓库清单 | `.` | `/Users/weigeqian/code/coding-pet` | existing checkout | `main`，尚无首个提交；不存放业务源码 |
-| `coding-pet` | Tauri 2 + React 桌宠应用、Rust 事件监听与 Codex Hook | `repositories/coding-pet/` | `/Users/weigeqian/code/coding-pet/repositories/coding-pet` | existing checkout | 独立 Git 项目，`main`，尚无首个提交；合成与真实 Codex 完成事件链路均已通过 |
+| `coding-pet-workspace` | 工作区规则、知识库、Agent Skills 与仓库清单 | `.` | `git@github.com:bobqian1007/coding-pet-workspace.git` | existing checkout | `main` 跟踪 `origin/main`；不存放业务源码 |
+| `coding-pet` | Tauri 2 + React 桌宠应用、Rust 事件监听与 Codex Hook | `repositories/coding-pet/` | `git@github.com:bobqian1007/coding-pet.git` | existing checkout | 独立 Git 项目，`main` 跟踪 `origin/main`；合成与真实 Codex 完成事件链路均已通过 |
 
 仓库状态必须与 `repositories/index.md` 和实际文件系统一致。未经用户授权，不 clone 仓库、不创建 worktree、不修改外部仓库状态。
 

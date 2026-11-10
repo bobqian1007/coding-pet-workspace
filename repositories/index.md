@@ -2,8 +2,8 @@
 
 | 名称 | 职责 | 工作区路径 | 来源 | 接入方式 | 状态 |
 | --- | --- | --- | --- | --- | --- |
-| `coding-pet-workspace` | 工作区规则、知识库、Agent Skills 与仓库清单 | `.` | `/Users/weigeqian/code/coding-pet` | existing checkout | `main`，尚无首个提交；不存放业务源码 |
-| `coding-pet` | Tauri 2 + React 桌宠应用、Rust 状态服务与 Codex Hook | `repositories/coding-pet/` | `/Users/weigeqian/code/coding-pet/repositories/coding-pet` | existing checkout | 独立 Git 项目，`main`，尚无首个提交；发布包视觉效果待人工验收 |
+| `coding-pet-workspace` | 工作区规则、知识库、Agent Skills 与仓库清单 | `.` | `git@github.com:bobqian1007/coding-pet-workspace.git` | existing checkout | `main` 跟踪 `origin/main`；不存放业务源码 |
+| `coding-pet` | Tauri 2 + React 桌宠应用、Rust 状态服务与 Codex Hook | `repositories/coding-pet/` | `git@github.com:bobqian1007/coding-pet.git` | existing checkout | 独立 Git 项目，`main` 跟踪 `origin/main`；发布包视觉效果待人工验收 |
 
 ## 接入约定
 
@@ -14,4 +14,14 @@
 - clone 或创建 worktree 前必须确认来源、目标路径和分支/提交并获得用户授权。
 - 目标子仓不存在或来源不明确时应停止并确认，不得退回根目录创建业务项目。
 - 状态变化后同步更新本文件和根目录 `AGENTS.md`。
+
+## 新工作区接入
+
+克隆主工作区后，在工作区根目录接入桌宠子仓：
+
+```bash
+git clone git@github.com:bobqian1007/coding-pet.git repositories/coding-pet
+```
+
+子仓由自己的 Git 仓库管理，根仓不会跟踪其文件。
 

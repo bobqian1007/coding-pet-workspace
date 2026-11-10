@@ -21,6 +21,16 @@
 - 增加子仓前，先确认仓库名称、职责、来源 URL 或本地路径，以及 clone、worktree 或现有 checkout 的接入方式。
 - 接入状态发生变化后，同步更新 `repositories/index.md` 和根目录 `AGENTS.md`。
 
+## Worktree 布局与开发流程
+
+- 所有开发 worktree 的统一根目录为 `~/code/worktrees/`。
+- 一个需求对应一个完整工作区，根仓 worktree 路径为 `~/code/worktrees/<change-id>/coding-pet/`。
+- 控制 worktree 使用 `codex/<change-id>` 分支，不以 detached HEAD 协调变更。
+- 开发顺序固定为：创建根仓 worktree，使用 OpenSpec 完成需求评审、跨仓代码分析和技术设计，评审受影响子仓集合，再在该工作区的 `repositories/<子仓名>/` 创建受影响子仓的 worktree 和开发分支。
+- 子仓 worktree 嵌入对应需求工作区后，仍由子仓自己的 Git 仓库管理；根仓继续通过 `.gitignore` 忽略其内容。
+- Codex 默认的 `~/.codex/worktrees/` 只可作为临时创建位置；若工具先在该目录生成 worktree，应迁移到 `~/code/worktrees/` 后再开始开发。
+- 具体变更的仓库、基线、分支、路径、状态和证据记录在对应 OpenSpec change 中；完整门禁见 [多仓变更流程](multi-repo-change-workflow.md)。
+
 新开发者克隆工作区后，可在工作区根目录执行：
 
 ```bash

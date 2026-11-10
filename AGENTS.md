@@ -19,15 +19,16 @@
 
 - `knowledge/`：可复用的业务、产品与技术知识；查询从 `knowledge/index.md` 开始。
 - `.agents/skills/`：仓库级 Agent Skills；每个技能由自己的 `SKILL.md` 声明。
+- `openspec/`：OpenSpec 配置、规格与变更历史；属于控制仓的长期、可审查资产。
 - `repositories/`：`index.md` 保存领域仓库清单；`repositories/<name>/` 中的子仓代码由各自独立 Git 仓库管理，并被根仓库忽略。
 - `runtime/`：可删除的生成物、调试输出和临时报告；不得存放长期知识或正式源码。
 
 ## 代码仓库
 
-| 名称 | 职责 | 工作区路径 | 来源 | 接入方式 | 状态 |
-| --- | --- | --- | --- | --- | --- |
-| `coding-pet-workspace` | 工作区规则、知识库、Agent Skills 与仓库清单 | `.` | `git@github.com:bobqian1007/coding-pet-workspace.git` | existing checkout | `main` 跟踪 `origin/main`；不存放业务源码 |
-| `coding-pet` | Tauri 2 + React 桌宠应用、Rust 事件监听与 Codex Hook | `repositories/coding-pet/` | `git@github.com:bobqian1007/coding-pet.git` | existing checkout | 独立 Git 项目，`main` 跟踪 `origin/main`；合成与真实 Codex 完成事件链路均已通过 |
+| 名称 | 职责 | 主检出路径 | 来源 / worktree origin | 默认分支 | 接入方式 | 状态与未决项 |
+| --- | --- | --- | --- | --- | --- | --- |
+| `coding-pet-workspace` | 工作区规则、知识库、OpenSpec、Agent Skills 与跨仓变更协调 | `.` | `git@github.com:bobqian1007/coding-pet-workspace.git` | `main` | existing checkout | `main` 跟踪 `origin/main`；控制分支使用 `codex/<change-id>`；不存放业务源码 |
+| `coding-pet` | Tauri 2 + React 桌宠应用、Rust 事件监听与 Codex Hook | `repositories/coding-pet/` | 本地 `repositories/coding-pet/`；远程 `git@github.com:bobqian1007/coding-pet.git` | `main` | existing checkout | `main` 跟踪 `origin/main`；开发分支命名约定待补充；合成与真实 Codex 完成事件链路均已通过；发布包视觉效果待人工验收 |
 
 仓库状态必须与 `repositories/index.md` 和实际文件系统一致。未经用户授权，不 clone 仓库、不创建 worktree、不修改外部仓库状态。
 
@@ -38,7 +39,25 @@
 - 根仓库通过 `.gitignore` 忽略 `repositories/*/`；只跟踪 `repositories/index.md`，不得使用 `git add -f` 把子仓代码加入根仓。
 - 对子仓执行 Git 命令时使用 `git -C repositories/<name> ...`，避免误操作根仓。
 - 新增、移除或变更子仓来源与状态时，同步更新 `repositories/index.md` 和本文件。
-- 开始业务开发前，先从仓库清单选择目标子仓并在该目录内工作；不得因为目标子仓不存在或路径不明确而在根目录创建项目脚手架。
+- 主检出只用于稳定基线、只读分析和创建 worktree；不得直接在主检出实施需求代码。
+- 目标子仓不存在或路径不明确时停止并确认；不得在根目录创建替代项目脚手架。
+
+### Worktree 约定
+
+- 所有开发 worktree 统一放在 `~/code/worktrees/`，不得使用 Codex 默认的 `~/.codex/worktrees/` 作为长期开发位置。
+- 每个需求先创建根工作区 worktree，路径使用 `~/code/worktrees/<change-id>/coding-pet/`；先在其中完成需求评审和跨仓代码分析。
+- 控制 worktree 必须使用专用 `codex/<change-id>` 分支，不得以 detached HEAD 协调变更。
+- 通过 OpenSpec 设计确认并评审受影响子仓后，再把对应子仓 worktree 创建到该根工作区的 `repositories/<子仓名>/`；不得为所有子仓预建 worktree。
+- 主 checkout 仅作为稳定基线和 worktree 管理入口；需求代码、过程文档和验证操作均在对应需求 worktree 中完成。
+- worktree 删除或 prune 是独立的破坏性操作；必须先取得授权并确认相关工作树干净。
+
+### SDD 与跨仓变更流程
+
+- OpenSpec 是默认 SDD provider；从控制 worktree 运行，其配置、规格和变更历史位于 `openspec/`。
+- Codex 通过 `.agents/skills/openspec-*/SKILL.md` 发现 OpenSpec 工作流；这些目录由 OpenSpec 管理，只能用 `openspec update` 刷新，不得手工修改。
+- 固定顺序为：创建控制分支和 worktree → OpenSpec 需求评审、代码与影响分析、技术设计 → 评审受影响仓库集合 → 仅为受影响子仓创建分支和 worktree → 实施与跨仓验证 → 记录集成证据并归档。
+- 技术设计必须记录 OpenSpec change、控制分支，以及每个受影响子仓的职责、精确 base revision、变更分支、worktree 路径、状态和证据；范围变化时先更新设计并重新通过仓库集合评审。
+- 控制 worktree 是跨仓状态和最终归档决策的事实来源。详细流程与映射模板见 `knowledge/technology/multi-repo-change-workflow.md`。
 
 ## 知识查询规则
 

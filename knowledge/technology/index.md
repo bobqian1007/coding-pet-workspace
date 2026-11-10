@@ -9,6 +9,7 @@
 - [系统架构](architecture.md)：技术栈、组件职责、目录建议和数据流。
 - [统一事件协议](event-protocol.md)：事件字段、状态模型和验证原则。
 - [Git 仓库边界](repository-layout.md)：根仓库与独立子仓的存放和版本控制规则。
+- [多仓变更流程](multi-repo-change-workflow.md)：控制仓优先的 OpenSpec 评审、子仓 worktree 门禁、变更映射和收尾规则。
 
 ## 维护信息
 
